@@ -5,18 +5,18 @@ const ImageFromUrl = ({ imageUrl, setCanvasMeasures }) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    const image = new window.Image();
-    image.src = imageUrl;
-    image.addEventListener("load", () => {
-      setImage(image);
+    const imageToLoad = new window.Image();
+    imageToLoad.src = imageUrl;
+    imageToLoad.addEventListener("load", () => {
+      setImage(imageToLoad);
       setCanvasMeasures({
-        width: image.width,
-        height: image.height
+        width: imageToLoad.width,
+        height: imageToLoad.height
       });
     });
 
-    return () => image.removeEventListener("load");
-  }, [imageUrl, setImage]);
+    return () => imageToLoad.removeEventListener("load");
+  }, [imageUrl, setImage, setCanvasMeasures]);
 
   return <Image image={image} />;
 };

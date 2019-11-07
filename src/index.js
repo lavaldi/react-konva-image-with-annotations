@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Stage, Layer, Rect } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import ImageFromUrl from "./ImageFromUrl";
+import Annotation from "./Annotation";
 import "./styles.css";
 
 const initialAnnotations = [
@@ -46,6 +47,25 @@ function App() {
           setCanvasMeasures={setCanvasMeasures}
           imageUrl="https://cdn.dribbble.com/users/2150390/screenshots/8064018/media/117406b607c400e7030deb6dfa60caa6.jpg"
         />
+      </Layer>
+      <Layer>
+        {annotations.map((annotation, i) => {
+          return (
+            <Annotation
+              key={i}
+              shapeProps={annotation}
+              isSelected={annotation.id === selectedId}
+              onSelect={() => {
+                selectAnnotation(annotation.id);
+              }}
+              onChange={newAttrs => {
+                const rects = annotations.slice();
+                rects[i] = newAttrs;
+                setAnnotations(rects);
+              }}
+            />
+          );
+        })}
       </Layer>
     </Stage>
   );
