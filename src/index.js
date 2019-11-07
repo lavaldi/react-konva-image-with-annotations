@@ -31,24 +31,16 @@ function App() {
   });
 
   return (
-    <Stage
-      width={canvasMeasures.width}
-      height={canvasMeasures.height}
-      onMouseDown={e => {
-        // deselect when clicked on empty area
-        const clickedOnEmpty = e.target === e.target.getStage();
-        if (clickedOnEmpty) {
-          selectAnnotation(null);
-        }
-      }}
-    >
+    <Stage width={canvasMeasures.width} height={canvasMeasures.height}>
       <Layer>
         <ImageFromUrl
           setCanvasMeasures={setCanvasMeasures}
           imageUrl="https://cdn.dribbble.com/users/2150390/screenshots/8064018/media/117406b607c400e7030deb6dfa60caa6.jpg"
+          onMouseDown={() => {
+            // deselect when clicked on empty area
+            selectAnnotation(null);
+          }}
         />
-      </Layer>
-      <Layer>
         {annotations.map((annotation, i) => {
           return (
             <Annotation

@@ -22,11 +22,11 @@ const Annotation = ({ shapeProps, isSelected, onSelect, onChange }) => {
         ref={shapeRef}
         {...shapeProps}
         draggable
-        onDragEnd={e => {
+        onDragEnd={event => {
           onChange({
             ...shapeProps,
-            x: e.target.x(),
-            y: e.target.y()
+            x: event.target.x(),
+            y: event.target.y()
           });
         }}
         onTransformEnd={event => {
