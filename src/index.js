@@ -32,11 +32,7 @@ function App() {
   });
 
   const handleMouseDown = event => {
-    console.log("handleMouseDown");
-    // deselect when clicked on empty area
-    selectAnnotation(null);
-    // create new annotation
-    if (newAnnotation.length === 0) {
+    if (selectedId === null && newAnnotation.length === 0) {
       const { x, y } = event.target.getStage().getPointerPosition();
       const id =
         annotations.length > 0
@@ -47,9 +43,7 @@ function App() {
   };
 
   const handleMouseUp = event => {
-    console.log("handleMouseUp");
-    if (newAnnotation.length === 1) {
-      console.log("handleMouseUp if");
+    if (selectedId === null && newAnnotation.length === 1) {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = event.target.getStage().getPointerPosition();
@@ -67,8 +61,7 @@ function App() {
   };
 
   const handleMouseMove = event => {
-    console.log("handleMouseMove");
-    if (newAnnotation.length === 1) {
+    if (selectedId === null && newAnnotation.length === 1) {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = event.target.getStage().getPointerPosition();
@@ -92,22 +85,26 @@ function App() {
     event.target.getStage().container().style.cursor = "crosshair";
   };
 
-  // const annotationsToDraw = [...annotations, ...newAnnotation];
+  const annotationsToDraw = [...annotations, ...newAnnotation];
   return (
     <Stage
       width={canvasMeasures.width}
       height={canvasMeasures.height}
       onMouseEnter={handleMouseEnter}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       <Layer>
         <ImageFromUrl
           setCanvasMeasures={setCanvasMeasures}
           imageUrl="https://cdn.dribbble.com/users/2150390/screenshots/8064018/media/117406b607c400e7030deb6dfa60caa6.jpg"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
+          onMouseDown={() => {
+            // deselect when clicked on empty area
+            selectAnnotation(null);
+          }}
         />
-        {annotations.map((annotation, i) => {
+        {annotationsToDraw.map((annotation, i) => {
           return (
             <Annotation
               key={i}

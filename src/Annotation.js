@@ -26,7 +26,7 @@ const Annotation = ({ shapeProps, isSelected, onSelect, onChange }) => {
       <Rect
         fill="transparent"
         stroke="blue"
-        onClick={onSelect}
+        onMouseDown={onSelect}
         ref={shapeRef}
         {...shapeProps}
         draggable
