@@ -13,6 +13,14 @@ const Annotation = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }
   }, [isSelected]);
 
+  const onMouseEnter = event => {
+    event.target.getStage().container().style.cursor = "move";
+  };
+
+  const onMouseLeave = event => {
+    event.target.getStage().container().style.cursor = "crosshair";
+  };
+
   return (
     <React.Fragment>
       <Rect
@@ -22,6 +30,8 @@ const Annotation = ({ shapeProps, isSelected, onSelect, onChange }) => {
         ref={shapeRef}
         {...shapeProps}
         draggable
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onDragEnd={event => {
           onChange({
             ...shapeProps,

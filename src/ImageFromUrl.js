@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Image } from "react-konva";
 
-const ImageFromUrl = ({ imageUrl, setCanvasMeasures, onMouseDown }) => {
+const ImageFromUrl = ({
+  imageUrl,
+  setCanvasMeasures,
+  onMouseDown,
+  onMouseUp,
+  onMouseMove
+}) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -18,7 +24,14 @@ const ImageFromUrl = ({ imageUrl, setCanvasMeasures, onMouseDown }) => {
     return () => imageToLoad.removeEventListener("load");
   }, [imageUrl, setImage, setCanvasMeasures]);
 
-  return <Image image={image} onMouseDown={onMouseDown} />;
+  return (
+    <Image
+      image={image}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+    />
+  );
 };
 
 export default ImageFromUrl;
