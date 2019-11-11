@@ -9,11 +9,12 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "konva": "4.0.16",
+    "konva": "4.0.17",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-konva": "16.10.1-0",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "uuid": "3.3.3"
   },
   "devDependencies": {
     "typescript": "3.3.3"

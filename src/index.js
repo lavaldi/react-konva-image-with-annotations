@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Stage, Layer } from "react-konva";
+import uuid from "uuid/v1";
 import ImageFromUrl from "./ImageFromUrl";
 import Annotation from "./Annotation";
 import "./styles.css";
@@ -11,14 +12,14 @@ const initialAnnotations = [
     y: 10,
     width: 100,
     height: 100,
-    id: "annotation1"
+    id: uuid()
   },
   {
     x: 150,
     y: 150,
     width: 100,
     height: 100,
-    id: "annotation2"
+    id: uuid()
   }
 ];
 
@@ -34,10 +35,7 @@ function App() {
   const handleMouseDown = event => {
     if (selectedId === null && newAnnotation.length === 0) {
       const { x, y } = event.target.getStage().getPointerPosition();
-      const id =
-        annotations.length > 0
-          ? `annotation${annotations.length}`
-          : "annotation1";
+      const id = uuid();
       setNewAnnotation([{ x, y, width: 0, height: 0, id }]);
     }
   };
@@ -52,7 +50,7 @@ function App() {
         y: sy,
         width: x - sx,
         height: y - sy,
-        id: `annotation${annotations.length + 1}`
+        id: uuid()
       };
       annotations.push(annotationToAdd);
       setNewAnnotation([]);
@@ -65,10 +63,7 @@ function App() {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = event.target.getStage().getPointerPosition();
-      const id =
-        annotations.length > 0
-          ? `annotation${annotations.length}`
-          : "annotation1";
+      const id = uuid();
       setNewAnnotation([
         {
           x: sx,
@@ -85,44 +80,57 @@ function App() {
     event.target.getStage().container().style.cursor = "crosshair";
   };
 
+  const handleKeyDown = event => {
+    if (event.keyCode === 8 || event.keyCode === 46) {
+      if (selectedId !== null) {
+        const newAnnotations = annotations.filter(
+          annotation => annotation.id !== selectedId
+        );
+        setAnnotations(newAnnotations);
+      }
+    }
+  };
+
   const annotationsToDraw = [...annotations, ...newAnnotation];
   return (
-    <Stage
-      width={canvasMeasures.width}
-      height={canvasMeasures.height}
-      onMouseEnter={handleMouseEnter}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
-      <Layer>
-        <ImageFromUrl
-          setCanvasMeasures={setCanvasMeasures}
-          imageUrl="https://cdn.dribbble.com/users/2150390/screenshots/8064018/media/117406b607c400e7030deb6dfa60caa6.jpg"
-          onMouseDown={() => {
-            // deselect when clicked on empty area
-            selectAnnotation(null);
-          }}
-        />
-        {annotationsToDraw.map((annotation, i) => {
-          return (
-            <Annotation
-              key={i}
-              shapeProps={annotation}
-              isSelected={annotation.id === selectedId}
-              onSelect={() => {
-                selectAnnotation(annotation.id);
-              }}
-              onChange={newAttrs => {
-                const rects = annotations.slice();
-                rects[i] = newAttrs;
-                setAnnotations(rects);
-              }}
-            />
-          );
-        })}
-      </Layer>
-    </Stage>
+    <div tabIndex={1} onKeyDown={handleKeyDown}>
+      <Stage
+        width={canvasMeasures.width}
+        height={canvasMeasures.height}
+        onMouseEnter={handleMouseEnter}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+        <Layer>
+          <ImageFromUrl
+            setCanvasMeasures={setCanvasMeasures}
+            imageUrl="https://cdn.dribbble.com/users/2150390/screenshots/8064018/media/117406b607c400e7030deb6dfa60caa6.jpg"
+            onMouseDown={() => {
+              // deselect when clicked on empty area
+              selectAnnotation(null);
+            }}
+          />
+          {annotationsToDraw.map((annotation, i) => {
+            return (
+              <Annotation
+                key={i}
+                shapeProps={annotation}
+                isSelected={annotation.id === selectedId}
+                onSelect={() => {
+                  selectAnnotation(annotation.id);
+                }}
+                onChange={newAttrs => {
+                  const rects = annotations.slice();
+                  rects[i] = newAttrs;
+                  setAnnotations(rects);
+                }}
+              />
+            );
+          })}
+        </Layer>
+      </Stage>
+    </div>
   );
 }
 
