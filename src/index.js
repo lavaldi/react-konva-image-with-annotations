@@ -40,24 +40,6 @@ function App() {
     }
   };
 
-  const handleMouseUp = event => {
-    if (selectedId === null && newAnnotation.length === 1) {
-      const sx = newAnnotation[0].x;
-      const sy = newAnnotation[0].y;
-      const { x, y } = event.target.getStage().getPointerPosition();
-      const annotationToAdd = {
-        x: sx,
-        y: sy,
-        width: x - sx,
-        height: y - sy,
-        id: uuid()
-      };
-      annotations.push(annotationToAdd);
-      setNewAnnotation([]);
-      setAnnotations(annotations);
-    }
-  };
-
   const handleMouseMove = event => {
     if (selectedId === null && newAnnotation.length === 1) {
       const sx = newAnnotation[0].x;
@@ -73,6 +55,14 @@ function App() {
           id
         }
       ]);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (selectedId === null && newAnnotation.length === 1) {
+      annotations.push(...newAnnotation);
+      setAnnotations(annotations);
+      setNewAnnotation([]);
     }
   };
 
